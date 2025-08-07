@@ -1,0 +1,18 @@
+
+FroeignKey Relation -- 
+
+Collection - product (a Collection have multiple product) 
+Customer - order (a Customer have multiple order)
+Order - Item (a Order have multiple Item)
+Cart - Item (a Cart have multiple Item)
+-- 
+
+
+# if we endup deleting collection we don't endup deleting products
+# if we endup deleting Product we don't endup deleting orderItem
+# if we endup cutomer calltion we don't endup deleting order
+
+# Here collection are parent class AND product are child class 
+# so we write codr  in product class beacuse their instance store in Callection
+collection = models.FroeignKey(Callection, on_delete = models.PROTECT)
+
