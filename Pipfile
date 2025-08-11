@@ -5,8 +5,9 @@ name = "pypi"
 
 [packages]
 django = "*"
-django-debug-toolbar = "*"
 pylint = "*"
+mysqlclient = "*"
+django-debug-toolbar = "*"
 
 [dev-packages]
 

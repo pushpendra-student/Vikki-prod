@@ -4,22 +4,35 @@ class Promotion(models.Model):
     description = models.CharField(max_length=255)
     discount = models.FloatField()
 
-class Callection(models.Model):
+class Collection(models.Model):
     title = models.CharField(max_length=255)
     feature_product = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True,  related_name='+')
+    
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        ordering = ['title']
 
 class Product(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(default='_')
     description = models.TextField()
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    unit_price = models.DecimalField(max_digits=6, decimal_places=2)
     inventory = models.IntegerField()
     last_update = models.DateTimeField(auto_now=True)
     
     
-    # if we endup deleting collection we don't endup deleting products
-    callection = models.ForeignKey(Callection, on_delete=models.PROTECT)
+    # if we endup deleting Collection we don't endup deleting products
+    collection = models.ForeignKey(Collection, on_delete=models.PROTECT)
     promotions = models.ManyToManyField(Promotion)
+    
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        ordering = ['title']
+    
     
 class Customer(models.Model):
     MEMBERSHIP_BRONZE = 'B'
@@ -36,9 +49,14 @@ class Customer(models.Model):
     last_name = models.CharField(max_length=255)
     email = models.EmailField(max_length=255, unique=True)
     birth_date = models.DateField(null=True)
-    phone = models.CharField(max_length=10)
+    phone = models.CharField(max_length=255)
     membership = models.CharField(max_length=1, choices= MEMBERSHIP_CHOICES, default=MEMBERSHIP_BRONZE)
     
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+    
+    class Meta:
+        ordering = ['first_name', 'last_name']
     
     
     
