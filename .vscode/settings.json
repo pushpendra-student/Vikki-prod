@@ -1,3 +1,12 @@
 {
-    "python.analysis.autoImportCompletions": false
+  "python.analysis.autoImportCompletions": false,
+  "editor.defaultFormatter": "ms-python.autopep8",
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
