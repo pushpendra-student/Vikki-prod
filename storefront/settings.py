@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'store',
     'tags',
     'likes',
+    'store_custom',
     'debug_toolbar',
 ]
 
@@ -53,7 +54,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-    
+
 ]
 
 INTERNAL_IPS = [
