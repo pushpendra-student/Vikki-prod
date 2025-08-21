@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from store.filters import ProductFilter
 from store.models import Product, Collection, Review
 from .serializers import ProductSerializer, CollectionSerializer, ReviewSerializer
 from rest_framework.response import Response
@@ -12,7 +13,7 @@ class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['collection_id']
+    filterset_class = ProductFilter
 
     def get_serializer_context(self):
         return {'request': self.request}
