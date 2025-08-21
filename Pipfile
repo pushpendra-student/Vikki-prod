@@ -9,6 +9,8 @@ pylint = "*"
 mysqlclient = "*"
 django-debug-toolbar = "*"
 djangorestframework = "*"
+drf-nested-routers = "*"
+django-filter = "*"
 
 [dev-packages]
 

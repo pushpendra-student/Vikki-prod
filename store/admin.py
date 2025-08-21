@@ -95,3 +95,8 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ['id', 'placed_at', 'customer']
     list_select_related = ['customer']
     list_per_page = 10
+
+
+# @admin.register(models.Review)
+# class ReviewAdmin(admin.ModelAdmin):
+#     list_display = ['date', 'name', 'description', 'product']
