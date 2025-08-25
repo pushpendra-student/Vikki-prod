@@ -1,19 +1,23 @@
 from django.shortcuts import get_object_or_404
-from store.filters import ProductFilter
-from store.models import Product, Collection, Review
-from .serializers import ProductSerializer, CollectionSerializer, ReviewSerializer
-from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
-from rest_framework import status
 from django.db.models.aggregates import Count
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework import status
+from rest_framework.filters import SearchFilter, OrderingFilter
+from store.models import Cart, Product, Collection, Review
+from store.filters import ProductFilter
+from .serializers import CartSerializer, ProductSerializer, CollectionSerializer, ReviewSerializer
 
 
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ProductFilter
+    search_fields = ['title', 'description']
+    ordering_fields = ['unit_price', 'last_update']
 
     def get_serializer_context(self):
         return {'request': self.request}
@@ -42,4 +46,10 @@ class ReviewViewSet(ModelViewSet):
     serializer_class = ReviewSerializer
 
     def get_serializer_context(self):
+        # this is use to get particular product id who we use to add a api data in reviews model
         return {'product_id': self.kwargs['product_pk']}
+
+
+class CartViewSet(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
+    queryset = Cart.objects.prefetch_related('items__product').all()
+    serializer_class = CartSerializer

@@ -1,7 +1,7 @@
 
 from decimal import Decimal
 from rest_framework import serializers
-from store.models import Collection, Product, Review
+from store.models import Cart, CartItem, Collection, Product, Review
 
 
 class CollectionSerializer(serializers.ModelSerializer):
@@ -24,12 +24,43 @@ class ProductSerializer(serializers.ModelSerializer):
         return product.unit_price * Decimal(1.1)
 
 
-class ReviewSerializer(serializers.Serializer):
+class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ['id', 'date', 'name', 'description']
 
-    # validated data is a dictionary whoes get data from views get_serializer_context method
+    # validated data is a dictionary whoes get product_id from views get_serializer_context method
     def create(self, validated_data):
         product_id = self.context['product_id']
         return Review.objects.create(product_id=product_id, **validated_data)
+
+
+class SimpleProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id', 'title', 'unit_price']
+
+
+class CartItemSerializer(serializers.ModelSerializer):
+    product = SimpleProductSerializer()
+    total_price = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CartItem
+        fields = ['id', 'product', 'quantity', 'total_price']
+
+    def get_total_price(self, cart_item: CartItem):
+        return cart_item.quantity * cart_item.product.unit_price
+
+
+class CartSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField(read_only=True)
+    items = CartItemSerializer(many=True)
+    total_price = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Cart
+        fields = ['id', 'items', 'total_price']
+
+    def get_total_price(self, cart):
+        return sum([item.quantity * item.product.unit_price for item in cart.items.all()])
