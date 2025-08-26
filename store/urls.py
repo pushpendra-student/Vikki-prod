@@ -14,4 +14,9 @@ product_router = routers.NestedDefaultRouter(
 product_router.register('reviews', views.ReviewViewSet,
                         basename='product-reviews')
 
-urlpatterns = router.urls + product_router.urls
+# First - parent router , parent prefix name, lookup which api look
+cart_router = routers.NestedDefaultRouter(router, 'carts', lookup='cart')
+# custom api prefix name - items , views , than basename= lookup-custom prefix
+cart_router.register('items', views.CartItemViewSet, basename='cart-items')
+
+urlpatterns = router.urls + product_router.urls + cart_router.urls

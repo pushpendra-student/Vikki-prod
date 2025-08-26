@@ -52,10 +52,9 @@ class CartItemSerializer(serializers.ModelSerializer):
     def get_total_price(self, cart_item: CartItem):
         return cart_item.quantity * cart_item.product.unit_price
 
-
 class CartSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
-    items = CartItemSerializer(many=True)
+    items = CartItemSerializer(many=True, read_only=True)
     total_price = serializers.SerializerMethodField()
 
     class Meta:
@@ -64,4 +63,42 @@ class CartSerializer(serializers.ModelSerializer):
 
     def get_total_price(self, cart):
         return sum([item.quantity * item.product.unit_price for item in cart.items.all()])
+
+
+class AddCartItemSerializer(serializers.ModelSerializer):
+    # we define product_id fields because it generated dyamic at run time
+    product_id = serializers.IntegerField()
     
+    def validate_product_id(self, value):
+        if  not Product.objects.filter(pk=value).exists():
+            raise serializers.ValidationError(f'No product with this given ID was Found.')
+        return value
+
+    # we overwrite save method beacuse we do not have to create same cartitem with same product_id, quantity in backend..
+    def save(self, **kwargs):
+        # before saving data serializer.is_valid() method call than create validated_date dictionary
+        # so we to get  from  product_id and quantity validated_date dictionary
+        # For the cart_id we get it from viwes  because this pass in url
+        cart_id = self.context['cart_id']
+        product_id = self.validated_data['product_id']
+        quantity = self.validated_data['quantity']
+        
+        try:
+            cart_item = CartItem.objects.get(cart_id=cart_id, product_id=product_id)
+            cart_item.quantity += quantity
+            cart_item.save()
+            self.instance = cart_item
+            # updating an existing item
+        except CartItem.DoesNotExist:
+            self.instance = cart_item = CartItem.objects.create(cart_id=cart_id, **self.validated_data)
+            # creating a new item
+            
+        return self.instance
+    class Meta:
+        model = CartItem
+        fields = ['id', 'product_id', 'quantity']
+
+class UpdateCartItemSerialzer(serializers.ModelSerializer):
+    class Meta:
+        model = CartItem
+        fields = ['quantity']
