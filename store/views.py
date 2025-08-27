@@ -12,7 +12,7 @@ from core.permissions import IsAdminOrReadOnly
 from store.permissions import FullDjangoModelPermissions, ViewCustomerHistoryPermission
 from store.models import Cart, Customer, Order, OrderItem, Product, Collection, Review, CartItem
 from store.filters import ProductFilter
-from .serializers import CartItemSerializer, CartSerializer, CreateOrderSerializer, OrderSerializer, ProductSerializer, CollectionSerializer, ReviewSerializer, AddCartItemSerializer, UpdateCartItemSerialzer, CustomerSerializer, OrderItemSerializer
+from .serializers import CartItemSerializer, CartSerializer, CreateOrderSerializer, OrderSerializer, ProductSerializer, CollectionSerializer, ReviewSerializer, AddCartItemSerializer, UpdateCartItemSerialzer, CustomerSerializer, OrderItemSerializer, UpdateOrderSerializer
 
 
 class ProductViewSet(ModelViewSet):
@@ -109,16 +109,29 @@ class CustomerViewSet(ModelViewSet):
 
 
 class OrderViewSet(ModelViewSet):
+    http_method_names = ['get','patch','delete','head','options']
 
-    permission_classes = [IsAuthenticated]
+    def get_permissions(self):
+        if self.request.method in ['PATCH','DELETE']:
+            return [IsAdminUser()]
+        return [IsAuthenticated()]
+
+
+    # Returing the actual created order to the client not the cart_id
+    def create(self, request, *args, **kwargs):
+        serializer = CreateOrderSerializer(data=request.data, context={'user_id': self.request.user.id})
+        serializer.is_valid(raise_exception=True)
+        order = serializer.save()
+        serializer = OrderSerializer(order)
+        return Response(serializer.data)
 
     def get_serializer_class(self):
         if self.request.method == "POST":
             return CreateOrderSerializer
+        elif self.request.method == "PATCH":
+            return UpdateOrderSerializer
         return OrderSerializer
 
-    def get_serializer_context(self):
-        return {'user_id': self.request.user.id}
 
     def get_queryset(self):
         user = self.request.user
@@ -129,3 +142,4 @@ class OrderViewSet(ModelViewSet):
         (customer_id, created) = Customer.objects.only(
             'id').get_or_create(user_id=user.id)
         return Order.objects.filter(customer_id=customer_id)
+
