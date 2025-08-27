@@ -12,7 +12,7 @@ class Promotion(models.Model):
 
 class Collection(models.Model):
     title = models.CharField(max_length=255)
-    feature_product = models.ForeignKey(
+    featured_product = models.ForeignKey(
         "Product", on_delete=models.SET_NULL, null=True, related_name="+"
     )
 
@@ -111,7 +111,8 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     # if we endup deleting order we don't endup deleting orderItem
-    order = models.ForeignKey(Order, on_delete=models.PROTECT)
+    order = models.ForeignKey(
+        Order, on_delete=models.PROTECT, related_name='items')
     # if we endup deleting Product we don't endup deleting orderItem
     product = models.ForeignKey(
         Product, on_delete=models.PROTECT, related_name='orderitems')
