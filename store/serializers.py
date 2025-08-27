@@ -132,3 +132,33 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['id', 'customer', 'placed_at', 'payment_status', 'items']
+
+
+class CreateOrderSerializer(serializers.Serializer):
+    cart_id = serializers.UUIDField()
+
+    def save(self, **kwargs):
+        cart_id = self.validated_data['cart_id']
+
+        # For creating a Order first get Customer's login id then use this id to create a order
+        (customer, created) = Customer.objects.get_or_create(
+            user_id=self.context['user_id'])
+        order = Order.objects.create(customer=customer)
+
+        # To create a orderItem first need to get cart_id where orderitem will placed then
+        # use this cart_id to get cart_items where we create orderitem(order,product,unit_price,quantity) objects
+
+        cart_item = CartItem.objects.select_related('product')\
+                        .filter(cart_id=cart_id)
+        order_items = [
+            OrderItem(
+                order=order,
+                product=item.product,
+                unit_price=item.product.unit_price,
+                quantity=item.quantity
+            ) for item in cart_item
+        ]
+
+        OrderItem.objects.bulk_create(order_items)
+
+        
