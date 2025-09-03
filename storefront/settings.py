@@ -70,6 +70,7 @@ INTERNAL_IPS = [
     # ...
 ]
 
+
 ROOT_URLCONF = 'storefront.urls'
 
 
