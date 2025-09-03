@@ -10,13 +10,13 @@ from rest_framework import status
 from rest_framework.filters import SearchFilter, OrderingFilter
 from core.permissions import IsAdminOrReadOnly
 from store.permissions import FullDjangoModelPermissions, ViewCustomerHistoryPermission
-from store.models import Cart, Customer, Order, OrderItem, Product, Collection, Review, CartItem
+from store.models import Cart, Customer, Order, OrderItem, Product, Collection, ProductImage, Review, CartItem
 from store.filters import ProductFilter
-from .serializers import CartItemSerializer, CartSerializer, CreateOrderSerializer, OrderSerializer, ProductSerializer, CollectionSerializer, ReviewSerializer, AddCartItemSerializer, UpdateCartItemSerialzer, CustomerSerializer, OrderItemSerializer, UpdateOrderSerializer
+from .serializers import CartItemSerializer, CartSerializer, CreateOrderSerializer, OrderSerializer, ProductImageSerializer, ProductSerializer, CollectionSerializer, ReviewSerializer, AddCartItemSerializer, UpdateCartItemSerialzer, CustomerSerializer, OrderItemSerializer, UpdateOrderSerializer
 
 
 class ProductViewSet(ModelViewSet):
-    queryset = Product.objects.all()
+    queryset = Product.objects.prefetch_related('images').all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ProductFilter
@@ -96,7 +96,7 @@ class CustomerViewSet(ModelViewSet):
     # this for any Customer
     @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated])
     def me(self, request):
-        (customer, created) = Customer.objects.get_or_create(
+        customer = Customer.objects.get(
             user_id=request.user.id)
         if request.method == 'GET':
             serializer = CustomerSerializer(customer)
@@ -109,17 +109,18 @@ class CustomerViewSet(ModelViewSet):
 
 
 class OrderViewSet(ModelViewSet):
-    http_method_names = ['get','patch','delete','head','options']
+    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
 
     def get_permissions(self):
-        if self.request.method in ['PATCH','DELETE']:
+        if self.request.method in ['PATCH', 'DELETE']:
             return [IsAdminUser()]
         return [IsAuthenticated()]
 
-
     # Returing the actual created order to the client not the cart_id
+
     def create(self, request, *args, **kwargs):
-        serializer = CreateOrderSerializer(data=request.data, context={'user_id': self.request.user.id})
+        serializer = CreateOrderSerializer(data=request.data, context={
+                                           'user_id': self.request.user.id})
         serializer.is_valid(raise_exception=True)
         order = serializer.save()
         serializer = OrderSerializer(order)
@@ -132,14 +133,21 @@ class OrderViewSet(ModelViewSet):
             return UpdateOrderSerializer
         return OrderSerializer
 
-
     def get_queryset(self):
         user = self.request.user
 
         if user.is_staff:
             return Order.objects.all()
 
-        (customer_id, created) = Customer.objects.only(
-            'id').get_or_create(user_id=user.id)
+        customer_id = Customer.objects.only('id').get(user_id=user.id)
         return Order.objects.filter(customer_id=customer_id)
 
+
+class ProductImageViewSet(ModelViewSet):
+    serializer_class = ProductImageSerializer
+
+    def get_serializer_context(self):
+        return {'product_id': self.kwargs['product_pk']}
+
+    def get_queryset(self):
+        return ProductImage.objects.filter(product_id=self.kwargs['product_pk'])

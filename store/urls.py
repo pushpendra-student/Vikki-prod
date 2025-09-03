@@ -10,10 +10,9 @@ router.register('carts', views.CartViewSet)
 router.register('customer', views.CustomerViewSet)
 router.register('orders', views.OrderViewSet, basename='orders')
 
-product_router = routers.NestedDefaultRouter(
-    router, 'products', lookup='product')
-product_router.register('reviews', views.ReviewViewSet,
-                        basename='product-reviews')
+product_router = routers.NestedDefaultRouter(router, 'products', lookup='product')
+product_router.register('reviews', views.ReviewViewSet,basename='product-reviews')
+product_router.register('images', views.ProductImageViewSet, basename='product-images')
 
 # First - parent router , parent prefix name, lookup which api look
 cart_router = routers.NestedDefaultRouter(router, 'carts', lookup='cart')
