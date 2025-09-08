@@ -4,7 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
 pylint = "*"
 mysqlclient = "*"
 django-debug-toolbar = "*"
@@ -15,8 +14,16 @@ djoser = "*"
 djangorestframework-simplejwt = "*"
 pillow = "*"
 django-cors-headers = "*"
+redis = "*"
+celery = "*"
+django = "*"
+pytest = "*"
+pytest-django = "*"
 
 [dev-packages]
+pytest = "*"
+pytest-django = "*"
+pytest-watch = "*"
 
 [requires]
 python_version = "3.12"

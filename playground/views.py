@@ -1,12 +1,9 @@
 from django.shortcuts import render
-from django.contrib.contenttypes.models import ContentType
-from store.models import *
-from tags.models import TaggedItem
-from  django.db.models import Q,F,Value
-from  django.db.models.functions import Concat
-from django.db import transaction
+from .tasks import notify_customers
+
+# celery - A storefront worker - -pool = solo - -loglevel = info
 
 
-def say_hello(request):    
-    return render(request,'hello.html')
-    
+def say_hello(request):
+    notify_customers.delay('hello')
+    return render(request, 'hello.html')

@@ -25,11 +25,16 @@ class CollectionAdmin(admin.ModelAdmin):
 
     @admin.display(ordering='products_count')
     def products_count(self, collection):
+        # adding link in products_count fields
         url = (
-            # reverse('admin:app_model_page')
+            # first we need to specify the link to go which models page
             reverse('admin:store_product_changelist')
+            # then we pass the specify pattern to url like ?collection__id=1
             + '?'
-            + urlencode({'collection__id': str(collection.id)})
+            # it give us collection__id but it return in interger so change it into string
+            + urlencode({
+                'collection__id': str(collection.id)
+            })
         )
 
         return format_html("<a href ='{}'> {} </a>", url, collection.products_count)
