@@ -12,7 +12,7 @@ from core.permissions import IsAdminOrReadOnly
 from store.permissions import FullDjangoModelPermissions, ViewCustomerHistoryPermission
 from store.models import Cart, Customer, Order, OrderItem, Product, Collection, ProductImage, Review, CartItem
 from store.filters import ProductFilter
-from .serializers import CartItemSerializer, CartSerializer, CreateOrderSerializer, OrderSerializer, ProductImageSerializer, ProductSerializer, CollectionSerializer, ReviewSerializer, AddCartItemSerializer, UpdateCartItemSerialzer, CustomerSerializer, OrderItemSerializer, UpdateOrderSerializer
+from .serializers import CartItemSerializer, CartSerializer, CreateOrderSerializer, OrderSerializer, ProductImageSerializer, ProductSerializer, CollectionSerializer, ReviewSerializer, AddCartItemSerializer, SimpleProductSerializer, UpdateCartItemSerialzer, CustomerSerializer, OrderItemSerializer, UpdateOrderSerializer
 
 
 class ProductViewSet(ModelViewSet):

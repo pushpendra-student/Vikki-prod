@@ -25,6 +25,7 @@ pytest = "*"
 pytest-django = "*"
 pytest-watch = "*"
 locust = "*"
+model-bakery = "*"
 
 [requires]
 python_version = "3.12"
