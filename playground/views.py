@@ -4,4 +4,9 @@ import requests
 
 
 def say_hello(request):
-    pass
+    key = 'http_result'
+    if cache.get(key) is None:
+        response = requests.get("http://httpbin.org/delay/2")
+        data = response.json()
+        cache.set(key, data)
+    return render(request, 'hello.html', {'name': cache.get(key)})
