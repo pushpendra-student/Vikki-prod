@@ -1,10 +1,12 @@
 {
   "python.analysis.autoImportCompletions": false,
-  "editor.defaultFormatter": "ms-python.autopep8",
-  "editor.formatOnSave": true,
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.autopep8",
+    "editor.formatOnSave": true
+  },
   "editor.formatOnPaste": true,
   "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": null
   },
   "python.languageServer": "Pylance",
   "editor.fontFamily": "FiraCode Nerd Font, Consolas, 'Courier New', monospace",
