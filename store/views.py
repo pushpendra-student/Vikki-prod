@@ -8,15 +8,15 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework import status
 from rest_framework.filters import SearchFilter, OrderingFilter
-from core.permissions import IsAdminOrReadOnly
-from store.permissions import FullDjangoModelPermissions, ViewCustomerHistoryPermission
+from store.permissions import IsAdminOrReadOnly, ViewCustomerHistoryPermission
 from store.models import Cart, Customer, Order, OrderItem, Product, Collection, ProductImage, Review, CartItem
 from store.filters import ProductFilter
 from .serializers import CartItemSerializer, CartSerializer, CreateOrderSerializer, OrderSerializer, ProductImageSerializer, ProductSerializer, CollectionSerializer, ReviewSerializer, AddCartItemSerializer, SimpleProductSerializer, UpdateCartItemSerialzer, CustomerSerializer, OrderItemSerializer, UpdateOrderSerializer
 
 
 class ProductViewSet(ModelViewSet):
-    queryset = Product.objects.prefetch_related('images').all()
+    queryset = Product.objects.select_related(
+        'collection').prefetch_related('images').all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ProductFilter
