@@ -1,0 +1,7 @@
+{
+  "store/tests/test_collections.py::TestcreateProduct::test_if_user_is_not_admin_returns_403": true,
+  "store/tests/test_collections.py::TestcreateProduct::test_if_data_is_valid_returns_201": true,
+  "store/tests/test_collections.py::TestRetrieveProduct::test_if_product_exists_returns_200": true,
+  "store/tests/test_products.py::TestcreateProduct::test_if_data_is_vaild_returns_200": true,
+  "store/tests/test_products.py::TestcreateProduct::test_if_data_is_vaild_returns_201": true
+}
