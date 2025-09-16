@@ -4,28 +4,27 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pylint = "*"
-mysqlclient = "*"
-django-debug-toolbar = "*"
+django = "*"
 djangorestframework = "*"
-drf-nested-routers = "*"
 django-filter = "*"
+drf-nested-routers = "*"
 djoser = "*"
 djangorestframework-simplejwt = "*"
+dj-database-url = "*"
+gunicorn = "*"
+psycopg2 = "*"
+whitenoise = "*"
+requests = "*"
 pillow = "*"
-django-cors-headers = "*"
-redis = "*"
+pytz = "*"
 celery = "*"
-django = "*"
-pytest = "*"
-pytest-django = "*"
+redis = "*"
 django-redis = "*"
+mysqlclient = "*"
 
 [dev-packages]
 pytest = "*"
 pytest-django = "*"
-pytest-watch = "*"
-locust = "*"
 model-bakery = "*"
 
 [requires]

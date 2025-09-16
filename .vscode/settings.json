@@ -6,11 +6,12 @@
   },
   "editor.formatOnPaste": true,
   "[html]": {
-    "editor.defaultFormatter": null
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "python.languageServer": "Pylance",
   "editor.fontFamily": "FiraCode Nerd Font, Consolas, 'Courier New', monospace",
   "editor.fontLigatures": true,
   "terminal.integrated.fontFamily": "FiraCode Nerd Font",
-  "terminal.integrated.fontLigatures.enabled": true
+  "terminal.integrated.fontLigatures.enabled": true,
+  
 }
