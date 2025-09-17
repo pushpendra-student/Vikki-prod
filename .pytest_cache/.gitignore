@@ -1,6 +1,0 @@
-# Created by pytest automatically.
-*.pyc
-'/media/'
-'/static/'
-debug.log
-
