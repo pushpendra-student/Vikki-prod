@@ -3,6 +3,7 @@
 *.pyc
 __pycache__/
 
+.bak
 
 db.sqlite3
 /static/
