@@ -1,6 +1,23 @@
-# Created by pytest automatically.
+# Python
 *.pyc
-'/media/'
-'/static/'
+__pycache__/
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+
+# Django stuff
+db.sqlite3
+/media/
+/static/
+
+# Logs
+*.log
 debug.log
 
+# IDE / Editor files
+.vscode/
+.idea/
+*.swp
