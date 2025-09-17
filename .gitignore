@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 *.pyc
 __pycache__/
@@ -6,6 +7,19 @@ __pycache__/
 db.sqlite3
 /static/
 /media/
+=======
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+
+
+
+db.sqlite3
+/media/
+/static/
+>>>>>>> 4e1eb2909a948c17e177c4d1c4fc86a28a3a1468
 
 
 *.log
@@ -14,6 +28,10 @@ debug.log
 
 .vscode/
 .idea/
+<<<<<<< HEAD
 
 
 .pytest_cache/
+=======
+*.swp
+>>>>>>> 4e1eb2909a948c17e177c4d1c4fc86a28a3a1468
