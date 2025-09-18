@@ -5,7 +5,7 @@ import dj_database_url
 DEBUG = False
 SECRET_KEY = os.environ['SECRET_KEY']
 
-ALLOWED_HOSTS = ['vikki-prod-production.up.railway.app', '.railway.app']
+ALLOWED_HOSTS = ['vikki-prod-production.up.railway.app']
 
 DATABASE_URL = f"mysql://{os.environ.get('MYSQLUSER')}:{os.environ.get('MYSQLPASSWORD')}@{os.environ.get('MYSQLHOST')}:{os.environ.get('MYSQLPORT', '3306')}/{os.environ.get('MYSQLDATABASE')}"
 DATABASES = {
@@ -13,12 +13,16 @@ DATABASES = {
 }
 
 CSRF_TRUSTED_ORIGINS = ['https://vikki-prod-production.up.railway.app']
-CELERY_BROKER_URL = 'redis://localhost:6379/1'
+
+REDIS_URL = f"redis://:{os.environ.get('REDISPASSWORD')}@{os.environ.get('REDISHOST')}:{os.environ.get('REDISPORT', '6379')}/1"
+
+
+CELERY_BROKER_URL = REDIS_URL
 
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/2",
+        "LOCATION": REDIS_URL,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
