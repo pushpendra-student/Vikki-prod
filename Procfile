@@ -1,6 +1,3 @@
-
 release: python manage.py migrate
-web: gunicorn storefront.wsgi --bind 0.0.0.0:$PORT
-worker: celery -A storefront worker 
-
-
+web: python manage.py collectstatic --noinput && gunicorn storefront.wsgi:application --bind 0.0.0.0:$PORT
+worker: celery -A storefront worker
