@@ -5,7 +5,7 @@ import dj_database_url
 DEBUG = False
 SECRET_KEY = os.environ['SECRET_KEY']
 
-ALLOWED_HOSTS = ['vikki-prod-production.up.railway.app']
+ALLOWED_HOSTS = ['vikki-prod-production.up.railway.app', '.railway.app']
 
 DATABASE_URL = f"mysql://{os.environ.get('MYSQLUSER')}:{os.environ.get('MYSQLPASSWORD')}@{os.environ.get('MYSQLHOST')}:{os.environ.get('MYSQLPORT', '3306')}/{os.environ.get('MYSQLDATABASE')}"
 DATABASES = {
